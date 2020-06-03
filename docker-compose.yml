@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  demorestapi:
+    image: ${DOCKER_REGISTRY-}demorestapi
+    build:
+      context: .
+      dockerfile: DemoRestApi/Dockerfile
