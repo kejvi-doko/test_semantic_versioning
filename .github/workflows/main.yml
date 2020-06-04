@@ -30,20 +30,18 @@ jobs:
         docker-compose build
         docker image ls
       
-    - name: Semantic Release Action
-      uses: codfish/semantic-release-action@v2
+    - uses: codfish/semantic-release-action@master
       id: semantic
-      with:
-        # The branch on which releases should happen. https://github.com/semantic-release/semantic-release/blob/master/docs/usage/configuration.md#branch
-        branch: master
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        
-    - name: Do something when a new release published
-      if: steps.semantic.outputs.new_release_published == 'true'
-      run: |
-        echo ${{ steps.semantic.outputs.new_release_version }}
-        echo ${{ steps.semantic.outputs.new_release_major_version }}
-        echo ${{ steps.semantic.outputs.new_release_minor_version }}
-        echo ${{ steps.semantic.outputs.new_release_patch_version }}
+
+    - run: echo ${{ steps.semantic.outputs.release-version }}
+
+    - run: echo "$OUTPUTS"
+      env:
+        OUTPUTS: ${{ toJson(steps.semantic.outputs) }}
+
+    - uses: codfish/some-other-action@master
+      with:
+        release-version: ${{ steps.semantic.outputs.release-version }}
