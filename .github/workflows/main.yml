@@ -29,3 +29,14 @@ jobs:
       run: |
         docker-compose build
         docker image ls
+      
+    - name: Semantic Release Action
+      uses: codfish/semantic-release-action@v1
+      with:
+        # The branch on which releases should happen. https://github.com/semantic-release/semantic-release/blob/master/docs/usage/configuration.md#branch
+        branch: Release/*
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        
+    
