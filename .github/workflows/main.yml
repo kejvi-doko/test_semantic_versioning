@@ -30,7 +30,7 @@ jobs:
         docker-compose build
         docker image ls
       
-    - uses: codfish/semantic-release-action@master
+    - uses: codfish/semantic-release-action@v1
       id: semantic
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
