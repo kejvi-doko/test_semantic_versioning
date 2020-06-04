@@ -75,5 +75,7 @@ jobs:
 
       - name: Tag Branch
         run: |
+          git config --global user.email "kejvidoko@gmail.com"
+          git config --global user.name "Kejvi Doko"
           git tag -a "v${{ steps.gitversion.outputs.semVer }}" -m "Release on Production with Version: ${{ steps.gitversion.outputs.semVer }}"
           git push origin "v${{ steps.gitversion.outputs.semVer }}"
