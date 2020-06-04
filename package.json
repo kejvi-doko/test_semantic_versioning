@@ -16,5 +16,10 @@
   "bugs": {
     "url": "https://github.com/kejvi-doko/test_semantic_versioning/issues"
   },
-  "homepage": "https://github.com/kejvi-doko/test_semantic_versioning#readme"
+  "homepage": "https://github.com/kejvi-doko/test_semantic_versioning#readme",
+  "release": {
+    "branches": [
+      "master"
+    ]
+  }
 }
