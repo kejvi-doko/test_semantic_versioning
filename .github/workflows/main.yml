@@ -19,6 +19,50 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+  
+    - name: Fetch all history for all tags and branches
+      run: |
+        git config remote.origin.url https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+        git fetch --prune --unshallow
+    - name: Install GitVersion
+      uses: gittools/actions/gitversion/setup@v0.9.2
+      with:
+          versionSpec: '5.2.x'
+    - name: Use GitVersion
+      id: gitversion # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v0.9.2
+    - run: |
+        echo "Major: ${{ steps.gitversion.outputs.major }}"
+        echo "Minor: ${{ steps.gitversion.outputs.minor }}"
+        echo "Patch: ${{ steps.gitversion.outputs.patch }}"
+        echo "PreReleaseTag: ${{ steps.gitversion.outputs.preReleaseTag }}"
+        echo "PreReleaseTagWithDash: ${{ steps.gitversion.outputs.preReleaseTagWithDash }}"
+        echo "PreReleaseLabel: ${{ steps.gitversion.outputs.preReleaseLabel }}"
+        echo "PreReleaseNumber: ${{ steps.gitversion.outputs.preReleaseNumber }}"
+        echo "WeightedPreReleaseNumber: ${{ steps.gitversion.outputs.weightedPreReleaseNumber }}"
+        echo "BuildMetaData: ${{ steps.gitversion.outputs.buildMetaData }}"
+        echo "BuildMetaDataPadded: ${{ steps.gitversion.outputs.buildMetaDataPadded }}"
+        echo "FullBuildMetaData: ${{ steps.gitversion.outputs.fullBuildMetaData }}"
+        echo "MajorMinorPatch: ${{ steps.gitversion.outputs.majorMinorPatch }}"
+        echo "SemVer: ${{ steps.gitversion.outputs.semVer }}"
+        echo "LegacySemVer: ${{ steps.gitversion.outputs.legacySemVer }}"
+        echo "LegacySemVerPadded: ${{ steps.gitversion.outputs.legacySemVerPadded }}"
+        echo "AssemblySemVer: ${{ steps.gitversion.outputs.assemblySemVer }}"
+        echo "AssemblySemFileVer: ${{ steps.gitversion.outputs.assemblySemFileVer }}"
+        echo "FullSemVer: ${{ steps.gitversion.outputs.fullSemVer }}"
+        echo "InformationalVersion: ${{ steps.gitversion.outputs.informationalVersion }}"
+        echo "BranchName: ${{ steps.gitversion.outputs.branchName }}"
+        echo "Sha: ${{ steps.gitversion.outputs.sha }}"
+        echo "ShortSha: ${{ steps.gitversion.outputs.shortSha }}"
+        echo "NuGetVersionV2: ${{ steps.gitversion.outputs.nuGetVersionV2 }}"
+        echo "NuGetVersion: ${{ steps.gitversion.outputs.nuGetVersion }}"
+        echo "NuGetPreReleaseTagV2: ${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
+        echo "NuGetPreReleaseTag: ${{ steps.gitversion.outputs.nuGetPreReleaseTag }}"
+        echo "VersionSourceSha: ${{ steps.gitversion.outputs.versionSourceSha }}"
+        echo "CommitsSinceVersionSource: ${{ steps.gitversion.outputs.commitsSinceVersionSource }}"
+        echo "CommitsSinceVersionSourcePadded: ${{ steps.gitversion.outputs.commitsSinceVersionSourcePadded }}"
+        echo "CommitDate: ${{ steps.gitversion.outputs.commitDate }}"
+        
 
     # Runs a single command using the runners shell
     - name: Run a one-line script
@@ -30,34 +74,3 @@ jobs:
         docker-compose build
         docker image ls
       
-#     - name: Semantic Release
-#       uses: cycjimmy/semantic-release-action@v2
-#       id: semantic   # Need an `id` for output variables
-#       with:
-#         # You can specify specifying version range for the extra plugins if you prefer.
-#         extra_plugins: |
-#           @semantic-release/changelog@3.0.0
-#           @semantic-release/git
-#       env:
-#         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#         NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-#     - name: Do something when a new release published
-#       if: steps.semantic.outputs.new_release_published == 'true'
-#       run: |
-#         echo ${{ steps.semantic.outputs.new_release_version }}
-#         echo ${{ steps.semantic.outputs.new_release_major_version }}
-#         echo ${{ steps.semantic.outputs.new_release_major_version }}
-#         echo ${{ steps.semantic.outputs.new_release_minor_version }}
-#         echo ${{ steps.semantic.outputs.new_release_patch_version }}
-
-    - uses: codfish/semantic-release-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-    - run: |
-        echo $RELEASE_VERSION
-        echo $RELEASE_MAJOR
-        echo $RELEASE_MINOR
-        echo $RELEASE_PATCH
